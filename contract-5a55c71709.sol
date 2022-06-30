@@ -11,12 +11,16 @@ contract Andy is ERC721, ERC721Enumerable, ERC721URIStorage {
 
     Counters.Counter private _tokenIdCounter;
     uint256 MAX_SUPPLY = 10000;
+    uint256 MAX_MINT = 2;
 
     constructor() ERC721("Andy", "LIS") {}
+
+    mapping(address => uint256) public balance;
 
     function safeMint(address to, string memory uri) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
         require(tokenId <= MAX_SUPPLY, "Sorry all NFTs have been minted.");
+        require(balance[to]< MAX_MINT,"Sorry you can not mint more NFTs.");
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
